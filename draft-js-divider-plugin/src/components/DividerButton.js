@@ -41,8 +41,7 @@ export default class DividerButton extends Component {
         editorState,
         getCurrentBlock(newDividerBlock),
       );
-    }
-    if (isBoth || isFirst) {
+    } else if (isBoth || isFirst) {
       newEditorState = insertNewLineBoth(
         editorState,
         getCurrentBlock(newDividerBlock),

@@ -1,6 +1,6 @@
 {
-  "name": "draft-js-divider-plugin",
-  "version": "0.1.0",
+  "name": "draft-js-divider-plugin-dev",
+  "version": "0.1.1",
   "description": "Divider Plugin for DraftJS",
   "author": {
     "name": "Ilkwon Sim",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/simsim0709/draft-js-divider-plugin.git"
+    "url": "https://github.com/simsim0709/draft-js-plugins.git"
   },
   "main": "lib/index.js",
   "keywords": [
@@ -34,9 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "decorate-component-with-props": "^1.0.2",
-    "prepend-http": "1.0.4",
     "prop-types": "^15.5.8",
-    "tlds": "^1.197.0",
     "union-class-names": "^1.0.0"
   },
   "peerDependencies": {
