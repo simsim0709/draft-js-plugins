@@ -1,7 +1,7 @@
 {
-  "name": "draft-js-divider-plugin",
-  "version": "0.1.1",
-  "description": "Divider Plugin for DraftJS",
+  "name": "draft-js-embeder-plugin",
+  "version": "0.1.0",
+  "description": "Embeder Plugin for DraftJS",
   "author": {
     "name": "Ilkwon Sim",
     "email": "simsim0709@gmail.com"
@@ -23,17 +23,17 @@
     "react-component"
   ],
   "scripts": {
+    "dev": "watch 'npm run build' src",
     "clean": "../node_modules/.bin/rimraf lib",
-    "build": "npm run clean && npm run build:js && npm run build:css",
+    "build": "npm run clean && npm run build:js",
     "build:js":
       "WEBPACK_CONFIG=$(pwd)/webpack.config.js BABEL_DISABLE_CACHE=1 BABEL_ENV=production NODE_ENV=production ../node_modules/.bin/babel --out-dir='lib' --ignore='__test__/*' src",
-    "build:css":
-      "node ../scripts/concatCssFiles $(pwd) && ../node_modules/.bin/rimraf lib-css",
     "prepublish": "npm run build"
   },
   "license": "MIT",
   "dependencies": {
     "decorate-component-with-props": "^1.0.2",
+    "is-url": "^1.2.2",
     "prop-types": "^15.5.8",
     "union-class-names": "^1.0.0"
   },
@@ -41,5 +41,8 @@
     "draft-js": "^0.10.1",
     "react": "^15.5.0 || ^16.0.0-rc",
     "react-dom": "^15.5.0 || ^16.0.0-rc"
+  },
+  "devDependencies": {
+    "watch": "^1.0.2"
   }
 }

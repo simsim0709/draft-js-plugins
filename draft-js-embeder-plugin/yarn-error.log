@@ -15,8 +15,8 @@ Platform:
 
 npm manifest: 
   {
-    "name": "draft-js-divider-plugin-dev",
-    "version": "0.1.1",
+    "name": "draft-js-divider-plugin",
+    "version": "0.1.0",
     "description": "Divider Plugin for DraftJS",
     "author": {
       "name": "Ilkwon Sim",
@@ -50,7 +50,9 @@ npm manifest:
     "license": "MIT",
     "dependencies": {
       "decorate-component-with-props": "^1.0.2",
+      "prepend-http": "1.0.4",
       "prop-types": "^15.5.8",
+      "tlds": "^1.197.0",
       "union-class-names": "^1.0.0"
     },
     "peerDependencies": {
@@ -180,7 +182,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 
 Trace: 
-  Error: https://registry.yarnpkg.com/draft-js-divider-plugin-dev: You must be logged in to publish packages.
+  Error: https://registry.yarnpkg.com/draft-js-divider-plugin: You must be logged in to publish packages.
       at Request.params.callback [as _callback] (/Users/similkwon/.yarn/lib/yarn-cli.js:58200:18)
       at Request.self.callback (/Users/similkwon/.yarn/lib/yarn-cli.js:114242:22)
       at emitTwo (events.js:125:13)
