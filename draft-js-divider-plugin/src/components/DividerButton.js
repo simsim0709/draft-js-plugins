@@ -1,85 +1,29 @@
 import React, { Component } from 'react';
-import unionClassNames from 'union-class-names';
+import PropTypes from 'prop-types';
 
-import {
-  // EditorState,
-  // Modifier,
-  // AtomicBlockUtils,
-  RichUtils,
-} from 'draft-js';
+import { insertCustomBlock } from '../utils';
 
-import {
-  // addNewBlock,
-  getCurrentBlock,
-  isFirstBlock,
-  isLastBlock,
-} from '../utils';
-import {
-  // insertNewLineBefore,
-  insertNewLineAfter,
-  insertNewLineBoth,
-} from '../utils/insertNewLine';
-
-export default class DividerButton extends Component {
-  addDivider = (event) => {
+class DividerButton extends Component {
+  onClick = event => {
     event.preventDefault();
 
     const editorState = this.props.getEditorState();
-    // const contentState = editorState.getCurrentContent();
-    // const selectionState = contentState.getSelectionAfter();
-    const isFirst = isFirstBlock(editorState);
-    const isLast = isLastBlock(editorState);
-    const isBoth = isFirst && isLast;
-    const newDividerBlock = RichUtils.toggleBlockType(
-      editorState,
-      this.props.blockType,
-    );
-    let newEditorState;
-
-    if (isLast) {
-      newEditorState = insertNewLineAfter(
-        editorState,
-        getCurrentBlock(newDividerBlock),
-      );
-    } else if (isBoth || isFirst) {
-      newEditorState = insertNewLineBoth(
-        editorState,
-        getCurrentBlock(newDividerBlock),
-      );
-    } else {
-      newEditorState = newDividerBlock;
-    }
+    const newEditorState = this.props.addDivider(editorState);
 
     this.props.setEditorState(newEditorState);
   };
 
-  preventBubblingUp = (event) => {
+  preventBubblingUp = event => {
     event.preventDefault();
-  };
-
-  blockTypeIsActive = () => {
-    // if the button is rendered before the editor
-    if (!this.props.getEditorState) {
-      return false;
-    }
-
-    const editorState = this.props.getEditorState();
-    const type = editorState
-      .getCurrentContent()
-      .getBlockForKey(editorState.getSelection().getStartKey())
-      .getType();
-    return type === this.props.blockType;
   };
 
   render() {
     const { theme } = this.props;
-    const className = this.blockTypeIsActive()
-      ? unionClassNames(theme.button, theme.active)
-      : theme.button;
+    const className = theme.button;
 
     return (
       <div className={theme.buttonWrapper} onMouseDown={this.preventBubblingUp}>
-        <button className={className} onClick={this.addDivider} type="button">
+        <button className={className} onClick={this.onClick} type="button">
           <svg
             height="24"
             viewBox="0 0 24 24"
@@ -94,3 +38,16 @@ export default class DividerButton extends Component {
     );
   }
 }
+
+DividerButton.propTypes = {
+  theme: PropTypes.object,
+  getEditorState: PropTypes.func.isRequired,
+  setEditorState: PropTypes.func.isRequired,
+  addDivider: PropTypes.func.isRequired,
+};
+
+DividerButton.defaultProps = {
+  theme: {},
+};
+
+export default DividerButton;

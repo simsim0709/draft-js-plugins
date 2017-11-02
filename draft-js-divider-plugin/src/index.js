@@ -5,10 +5,12 @@ import DividerButton from './components/DividerButton';
 
 import buttonStyles from './buttonStyles.css';
 
+import addDivider from './modifiers/addDivider';
+
 const createDividerPlugin = (
-  { blockType = 'divider', component = DefaultDivider } = {},
+  { blockType = 'divider', component = DefaultDivider } = {}
 ) => ({
-  blockRendererFn: (block) => {
+  blockRendererFn: block => {
     if (block.getType() === blockType) {
       return {
         component,
@@ -16,9 +18,14 @@ const createDividerPlugin = (
       };
     }
   },
-  DividerButton: (props) => (
-    <DividerButton {...props} blockType={blockType} theme={buttonStyles} />
+  DividerButton: props => (
+    <DividerButton
+      {...props}
+      addDivider={addDivider(blockType)}
+      theme={buttonStyles}
+    />
   ),
+  addDivider: addDivider(blockType),
 });
 
 export default createDividerPlugin;
