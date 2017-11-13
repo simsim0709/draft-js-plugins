@@ -1,7 +1,7 @@
 {
-  "name": "draft-js-embeder-plugin",
-  "version": "0.2.0",
-  "description": "Embeder Plugin for DraftJS",
+  "name": "draft-js-side-toolbar-plugin-2",
+  "version": "0.1.0",
+  "description": "Toolbar Plugin for DraftJS",
   "author": {
     "name": "Ilkwon Sim",
     "email": "simsim0709@gmail.com"
@@ -19,21 +19,24 @@
     "ux",
     "components",
     "widget",
-    "link",
     "react-component"
   ],
   "scripts": {
     "dev": "watch 'npm run build' src",
     "clean": "../node_modules/.bin/rimraf lib",
-    "build": "npm run clean && npm run build:js",
+    "build": "npm run clean && npm run build:js && npm run build:css",
     "build:js":
       "WEBPACK_CONFIG=$(pwd)/webpack.config.js BABEL_DISABLE_CACHE=1 BABEL_ENV=production NODE_ENV=production ../node_modules/.bin/babel --out-dir='lib' --ignore='__test__/*' src",
+    "build:css":
+      "node ../scripts/concatCssFiles $(pwd) && ../node_modules/.bin/rimraf lib-css",
     "prepublish": "npm run build"
   },
   "license": "MIT",
   "dependencies": {
     "decorate-component-with-props": "^1.0.2",
-    "is-url": "^1.2.2",
+    "draft-js-buttons": "^2.0.0-rc8",
+    "find-with-regex": "^1.0.2",
+    "immutable": "~3.7.4",
     "prop-types": "^15.5.8",
     "union-class-names": "^1.0.0"
   },
