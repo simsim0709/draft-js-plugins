@@ -27,7 +27,13 @@ const embederPlugin = ({
     blockRendererFn: (block, { getEditorState }) => {
       if (block.getType() === ATOMIC) {
         const contentState = getEditorState().getCurrentContent();
-        const entity = contentState.getEntity(block.getEntityAt(0));
+        const entityKey = block && block.getEntityAt(0);
+
+        if (!entityKey) {
+          return;
+        }
+
+        const entity = contentState.getEntity(entityKey);
         const type = entity.getType();
         const data = entity.getData();
 
@@ -39,8 +45,6 @@ const embederPlugin = ({
           };
         }
       }
-
-      return null;
     },
     handleReturn: async (event, editorState, { setEditorState }) => {
       if (!shouldHandleOnReturn) {
@@ -57,7 +61,12 @@ const embederPlugin = ({
       }
 
       try {
-        const data = await onReturn({ url: blockText });
+        const data = (await onReturn({ url: blockText })) || {};
+
+        if (!data.html) {
+          return 'not-handled';
+        }
+
         const newState = addEmbeder(
           editorState,
           {
@@ -71,7 +80,6 @@ const embederPlugin = ({
 
         return 'handled';
       } catch (error) {
-        // console.error('error', error);
         return 'not-handled';
       }
     },
