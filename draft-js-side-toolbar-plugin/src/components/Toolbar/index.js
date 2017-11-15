@@ -2,7 +2,18 @@
 import React from 'react';
 import DraftOffsetKey from 'draft-js/lib/DraftOffsetKey';
 
-export default class Toolbar extends React.Component {
+const getRelativeParent = element => {
+  if (!element) {
+    return null;
+  }
+
+  return window.getComputedStyle(element).getPropertyValue('position') ===
+    'relative'
+    ? element
+    : getRelativeParent(element.parentElement);
+};
+
+class Toolbar extends React.Component {
   static shouldShowToolbar = contentBlock => {
     const isEmptyBlock = !contentBlock.getText().trim();
     const blockType = contentBlock.getType();
@@ -12,12 +23,14 @@ export default class Toolbar extends React.Component {
 
   state = {
     position: {
-      transform: 'scale(0)',
+      visibility: 'hidden',
     },
+    relative: false,
   };
 
   componentDidMount() {
     this.props.store.subscribeToItem('editorState', this.onEditorStateChange);
+    this.setRelatvie(!!getRelativeParent(this.toolbar.parentElement));
   }
 
   componentWillUnmount() {
@@ -29,10 +42,11 @@ export default class Toolbar extends React.Component {
 
   onEditorStateChange = editorState => {
     const selection = editorState.getSelection();
+
     if (!selection.getHasFocus()) {
       this.setState({
         position: {
-          transform: 'scale(0)',
+          visibility: 'hidden',
         },
       });
       return;
@@ -45,36 +59,57 @@ export default class Toolbar extends React.Component {
     const offsetKey = DraftOffsetKey.encode(currentBlock.getKey(), 0, 0);
     // Note: need to wait on tick to make sure the DOM node has been create by Draft.js
     setTimeout(() => {
+      const { relative } = this.state;
       const node = document.querySelectorAll(
         `[data-offset-key="${offsetKey}"]`
       )[0];
-      const { top } = node ? node.getBoundingClientRect() : {};
+      let top;
+      let left;
 
-      if (!top) {
+      if (relative) {
+        const { offsetTop } = node;
+        top = offsetTop + this.props.diffTop;
+        left = this.props.diffLeft;
+      } else {
+        const clientRect = node && node.getBoundingClientRect();
+        const scrollY =
+          window.scrollY == null ? window.pageYOffset : window.scrollY;
+
+        top = clientRect && clientRect.top + scrollY + this.props.diffTop;
+        left = clientRect && clientRect.left + this.props.diffLeft;
+      }
+
+      if (typeof top !== 'number') {
         return;
       }
 
-      const editor = this.props.store.getItem('getEditorRef')().refs.editor;
-      const scrollY =
-        window.scrollY == null ? window.pageYOffset : window.scrollY;
-
-      this.setState({
-        position: {
-          top: top + scrollY,
-          left: editor.getBoundingClientRect().left - 80,
-          transform: Toolbar.shouldShowToolbar(currentBlock)
-            ? 'scale(1)'
-            : 'scale(0)',
-          transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
-        },
+      this.setPosition({
+        top,
+        left,
+        visibility: Toolbar.shouldShowToolbar(currentBlock)
+          ? 'visible'
+          : 'hidden',
+        transition: 'all .1s ease, visibility .1s linear .1s',
       });
     }, 0);
   };
 
+  setPosition(position) {
+    this.setState({ position });
+  }
+
+  setRelatvie(relative) {
+    this.setState({ relative });
+  }
+
   render() {
     const { theme, store } = this.props;
     return (
-      <div className={theme.toolbarStyles.wrapper} style={this.state.position}>
+      <div
+        className={theme.toolbarStyles.wrapper}
+        style={this.state.position}
+        ref={element => (this.toolbar = element)}
+      >
         {this.props.structure.map((Component, index) => (
           <Component
             key={index}
@@ -87,3 +122,10 @@ export default class Toolbar extends React.Component {
     );
   }
 }
+
+Toolbar.defaultProps = {
+  diffTop: 0,
+  diffLeft: 0,
+};
+
+export default Toolbar;
