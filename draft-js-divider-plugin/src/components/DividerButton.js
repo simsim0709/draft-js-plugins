@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import unionClassNames from 'union-class-names';
+
 import { insertCustomBlock } from '../utils';
 
 class DividerButton extends Component {
@@ -17,9 +19,20 @@ class DividerButton extends Component {
     event.preventDefault();
   };
 
+  blockTypeIsActive = () => {
+    const editorState = this.props.getEditorState();
+    const type = editorState
+      .getCurrentContent()
+      .getBlockForKey(editorState.getSelection().getStartKey())
+      .getType();
+    return type === this.props.blockType;
+  };
+
   render() {
     const { theme } = this.props;
-    const className = theme.button;
+    const className = this.blockTypeIsActive()
+      ? unionClassNames(theme.button, theme.active)
+      : theme.button;
 
     return (
       <div className={theme.buttonWrapper} onMouseDown={this.preventBubblingUp}>

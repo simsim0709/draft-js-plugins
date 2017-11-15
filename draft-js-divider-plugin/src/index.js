@@ -3,8 +3,6 @@ import React from 'react';
 import DefaultDivider from './components/DefaultDivider';
 import DividerButton from './components/DividerButton';
 
-import buttonStyles from './buttonStyles.css';
-
 import addDivider from './modifiers/addDivider';
 
 const createDividerPlugin = (
@@ -21,8 +19,8 @@ const createDividerPlugin = (
   DividerButton: props => (
     <DividerButton
       {...props}
+      blockType={blockType}
       addDivider={addDivider(blockType)}
-      theme={buttonStyles}
     />
   ),
   addDivider: addDivider(blockType),
