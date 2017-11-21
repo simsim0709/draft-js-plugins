@@ -2,14 +2,16 @@ import { EditorState } from 'draft-js';
 
 import DefaultPlaceholder from './components/DefaultPlaceholder';
 
-const placeholderPlugin = ({ dataKey = 'placeholder' } = {}) => {
+const placeholderPlugin = (
+  { dataKey = 'placeholder', component = DefaultPlaceholder } = {}
+) => {
   return {
     blockRendererFn: block => {
       const placeholder = block.getData().get(dataKey);
 
       if (placeholder) {
         return {
-          component: DefaultPlaceholder,
+          component,
           props: {
             placeholder,
           },
