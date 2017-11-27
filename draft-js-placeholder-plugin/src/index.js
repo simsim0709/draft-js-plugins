@@ -1,9 +1,14 @@
 import { EditorState } from 'draft-js';
 
 import DefaultPlaceholder from './components/DefaultPlaceholder';
+import addPlaceholder from './modifiers/addPlaceholder';
 
 const placeholderPlugin = (
-  { dataKey = 'placeholder', component = DefaultPlaceholder } = {}
+  {
+    dataKey = 'placeholder',
+    placeholder = '',
+    component = DefaultPlaceholder,
+  } = {}
 ) => {
   return {
     blockRendererFn: block => {
@@ -27,6 +32,8 @@ const placeholderPlugin = (
     handleBeforeInput: (chars, editorState, { setEditorState }) => {
       return deletePlaceholderData({ editorState, setEditorState, dataKey });
     },
+
+    addPlaceholder: addPlaceholder({ dataKey, placeholder }),
   };
 };
 

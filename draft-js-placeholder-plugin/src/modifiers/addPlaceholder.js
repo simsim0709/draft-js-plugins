@@ -1,4 +1,8 @@
-const addPlaceholder = editorState => {
+import { EditorState, Modifier } from 'draft-js';
+
+import { getCurrentBlock, isEmptyBlock } from '../utils';
+
+const addPlaceholder = ({ dataKey, placeholder }) => editorState => {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
   const currentBlock = getCurrentBlock(editorState);
@@ -8,13 +12,12 @@ const addPlaceholder = editorState => {
       contentState,
       selectionState,
       {
-        placeholder: 'This is placeholder',
+        [dataKey]: placeholder,
       }
     );
 
-    setEditorState(
-      EditorState.push(editorState, newContentState, 'change-block-data')
-    );
+    return EditorState.push(editorState, newContentState, 'change-block-data');
+
     // setEditorState(RichUtils.toggleBlockType(editorState, 'placeholder'));
     // setEditorState(
     //   Modifier.insertText(contentState, selectionState, 'attach youtube')
