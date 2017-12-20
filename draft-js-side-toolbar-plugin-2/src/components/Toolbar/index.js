@@ -108,8 +108,7 @@ class Toolbar extends React.Component {
       <div
         className={theme.toolbarStyles.wrapper}
         style={this.state.position}
-        ref={element => (this.toolbar = element)}
-      >
+        ref={element => (this.toolbar = element)}>
         {this.props.structure.map((Component, index) => (
           <Component
             key={index}
