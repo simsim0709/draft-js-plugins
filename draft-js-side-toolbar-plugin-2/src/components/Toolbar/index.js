@@ -71,12 +71,13 @@ class Toolbar extends React.Component {
         top = offsetTop + this.props.diffTop;
         left = this.props.diffLeft;
       } else {
+        const editor = this.props.store.getItem('getEditorRef')().refs.editor;
         const clientRect = node && node.getBoundingClientRect();
         const scrollY =
           window.scrollY == null ? window.pageYOffset : window.scrollY;
 
         top = clientRect && clientRect.top + scrollY + this.props.diffTop;
-        left = clientRect && clientRect.left + this.props.diffLeft;
+        left = editor.getBoundingClientRect().left + this.props.diffLeft;
       }
 
       if (typeof top !== 'number') {
